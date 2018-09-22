@@ -1,0 +1,336 @@
+#!/bin/bash
+
+execdir=$(dirname $(readlink -f $0))
+
+name=${1%.*}
+
+tempname=$(mktemp -u)
+tempps=${tempname}.ps
+temppdf=${tempname}.pdf
+temptheme=${tempname}.theme
+tempplugin=${tempname}.lua
+namepdf=${name}.pdf
+namehtml=${name}.html
+
+if [ -n "$2" ]; then
+  namepdf=$2/$(basename $namepdf)
+fi
+
+if [ -n "$3" ]; then
+  namehtml=$3/$(basename $namehtml)
+fi
+
+mainfont="Source Sans Pro"
+
+cat > ${temptheme} <<'EOF'
+{
+    "text-color": null,
+    "background-color": "#f0f0ff",
+    "line-number-color": "#aaaaaa",
+    "line-number-background-color": null,
+    "text-styles": {
+        "Other": {
+            "text-color": "#007020",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Attribute": {
+            "text-color": "#7d9029",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "SpecialString": {
+            "text-color": "#bb6688",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Annotation": {
+            "text-color": "#60a0b0",
+            "background-color": null,
+            "bold": true,
+            "italic": true,
+            "underline": false
+        },
+        "Function": {
+            "text-color": "#06287e",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "String": {
+            "text-color": "#4070a0",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "ControlFlow": {
+            "text-color": "#007020",
+            "background-color": null,
+            "bold": true,
+            "italic": false,
+            "underline": false
+        },
+        "Operator": {
+            "text-color": "#666666",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Error": {
+            "text-color": "#ff0000",
+            "background-color": null,
+            "bold": true,
+            "italic": false,
+            "underline": false
+        },
+        "BaseN": {
+            "text-color": "#40a070",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Alert": {
+            "text-color": "#ff0000",
+            "background-color": null,
+            "bold": true,
+            "italic": false,
+            "underline": false
+        },
+        "Variable": {
+            "text-color": "#19177c",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "BuiltIn": {
+            "text-color": null,
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Extension": {
+            "text-color": null,
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Preprocessor": {
+            "text-color": "#bc7a00",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Information": {
+            "text-color": "#60a0b0",
+            "background-color": null,
+            "bold": true,
+            "italic": true,
+            "underline": false
+        },
+        "VerbatimString": {
+            "text-color": "#4070a0",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Warning": {
+            "text-color": "#60a0b0",
+            "background-color": null,
+            "bold": true,
+            "italic": true,
+            "underline": false
+        },
+        "Documentation": {
+            "text-color": "#ba2121",
+            "background-color": null,
+            "bold": false,
+            "italic": true,
+            "underline": false
+        },
+        "Import": {
+            "text-color": null,
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Char": {
+            "text-color": "#4070a0",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "DataType": {
+            "text-color": "#902000",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Float": {
+            "text-color": "#40a070",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Comment": {
+            "text-color": "#60a0b0",
+            "background-color": null,
+            "bold": false,
+            "italic": true,
+            "underline": false
+        },
+        "CommentVar": {
+            "text-color": "#60a0b0",
+            "background-color": null,
+            "bold": true,
+            "italic": true,
+            "underline": false
+        },
+        "Constant": {
+            "text-color": "#880000",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "SpecialChar": {
+            "text-color": "#4070a0",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "DecVal": {
+            "text-color": "#40a070",
+            "background-color": null,
+            "bold": false,
+            "italic": false,
+            "underline": false
+        },
+        "Keyword": {
+            "text-color": "#007020",
+            "background-color": null,
+            "bold": true,
+            "italic": false,
+            "underline": false
+        }
+    }
+}
+EOF
+
+cat > ${tempplugin} <<'EOF'
+local function is_html (format)
+  return format == 'html' or format == 'html4' or format == 'html5'
+end
+
+local function is_latex (format)
+  return format == 'latex'
+end
+
+local function codeblock2pdf(code, outfile)
+    local tmp = os.tmpname()
+    local tmpdir = string.match(tmp, "^(.*[\\/])") or "."
+    local f = io.open(tmp .. ".tex", 'w')
+    latex=pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "full,style=alloy,linenos=true,noclasses", "-f", "latex"}, code)
+    latex=latex:gsub("\\documentclass{article}","\\documentclass[preview]{standalone}")
+    latex=latex:gsub("\\usepackage%[.*%]{inputenc}","")
+    latex=latex:gsub("\\section%*{}","")
+    f:write(latex)
+    f:close()
+    os.execute("pdflatex  -interaction=batchmode -output-directory=" .. tmpdir  .. " " .. tmp .. " > /dev/null 2>&1")
+    os.remove(tmp .. ".tex")
+    os.remove(tmp .. ".log")
+    os.remove(tmp .. ".aux")
+    pdf=pandoc.pipe("cat",{tmp .. ".pdf"},"")
+    os.remove(tmp .. ".pdf")
+    return pdf
+end
+
+local function file_exists(name)
+    local f = io.open(name, 'r')
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
+end
+
+local function codeblock2html(code)
+    return pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "style=alloy,linenos=inline,noclasses", "-f", "html"}, code)
+end
+
+local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
+
+local function plantuml(puml, filetype, plantumlPath)
+    local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
+    return final
+end
+
+function CodeBlock(block)
+    if block.classes[1] == "alloy" then
+     if is_html(FORMAT) then
+        local html = codeblock2html(block.text)
+        return pandoc.RawBlock('html',html)
+     end
+     if is_latex(FORMAT) then
+        local fname = pandoc.sha1(block.text) .. ".pdf"
+        local pdf = codeblock2pdf(block.text, fname)
+        pandoc.mediabag.insert(fname, "application/pdf", pdf)
+        return pandoc.Para({pandoc.Image({pandoc.Str("Alloy source code")}, fname)})
+     end
+   end
+   if block.classes[1] == "plantuml" then
+     if is_html(FORMAT) then
+        -- "svg"
+        -- "image/svg+xml"
+        local img = plantuml(block.text, "png", plantumlPath)
+        local fname = pandoc.sha1(img) .. ".png"
+        pandoc.mediabag.insert(fname, "image/png", img)
+        return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
+     end
+     if is_latex(FORMAT) then
+        local img = plantuml(block.text, "pdf", plantumlPath)
+        local fname = pandoc.sha1(img) .. ".pdf"
+        pandoc.mediabag.insert(fname, "application/pdf", img)
+        return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
+     end
+   end
+   return block
+end
+EOF
+
+export PLANTUML=${execdir}/plantuml/plantuml.jar
+
+echo Processing:
+echo 1. Generating docs: $1 '->' ${namepdf}
+pandoc -f gfm -t latex -M mainfont="${mainfont}" --highlight-style=${temptheme} --pdf-engine=xelatex --lua-filter=${tempplugin} --standalone --self-contained -o ${temppdf} $1 > /dev/null 2>&1
+pdf2ps ${temppdf} ${tempps}
+ps2pdf14 -dPDFSETTINGS=/default ${tempps} ${temppdf}
+mv ${temppdf} ${namepdf}
+echo '                   ' $1 '->' ${namehtml}
+pandoc -f gfm -t html --highlight-style=${temptheme} --self-contained  --lua-filter=${tempplugin} -o ${namehtml} $1 > /dev/null 2>&1
+rm ${tempps} ${temptheme} >/dev/null 2>&1
+
+echo 2. Extracting sources:
+$execdir/md2sources $1 $4
+
+rm ${tempplugin} > /dev/null 2>&1
