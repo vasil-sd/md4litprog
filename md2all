@@ -279,9 +279,10 @@ local function codeblock2html(code)
 end
 
 local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
+local plantumlFont = os.getenv("PLANTUML_FONT") or "Helvetica"
 
 local function plantuml(puml, filetype, plantumlPath)
-    local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
+    local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8", "-SDefaultFontName=" .. plantumlFont}, puml)
     return final
 end
 
@@ -318,7 +319,9 @@ function CodeBlock(block)
 end
 EOF
 
-export PLANTUML=${execdir}/plantuml/plantuml.jar
+export CLASSPATH="${execdir}/batik-all-1.9.jar:${execdir}/fop-transcoder-allinone-2.2.jar:${execdir}/xml-apis-1.3.04.jar:${execdir}/xml-apis-ext-1.3.04.jar:${execdir}/xmlgraphics-commons-2.2.jar"
+export PLANTUML=${execdir}/plantuml.jar
+export PLANTUML_FONT="${mainfont}"
 
 echo Processing:
 echo 1. Generating docs: $1 '->' ${namepdf}
