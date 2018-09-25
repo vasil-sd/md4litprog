@@ -3,9 +3,11 @@
 exec_dir=$(dirname $(readlink -f $0))
 
 extensions="
+tla:tla
 ocaml:ml
 alloy:als
 c:c
+shell:sh
 "
 
 intf_extensions="
