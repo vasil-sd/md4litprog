@@ -6,6 +6,8 @@ nopdf=$(echo "$@" | grep -F "nopdf")
 nohtml=$(echo "$@" | grep -F "nohtm")
 nosrc=$(echo "$@" | grep -F "nosrc")
 embedfonts=$(echo "$@" | grep -F "embedfonts")
+usesvg=$(echo "$@" | grep -F "usesvg")
+numbers=$(echo "$@" | grep -F "linenum")
 
 name=${1%.*}
 
@@ -26,6 +28,22 @@ export TEXT_FONT="Source Sans Pro"
 export PLANTUML=${execdir}/plantuml/plantuml.jar
 export PLANTUML_FONT="${mainfont}"
 export CLASSPATH=$(dirname $(find /usr/share/java/tla-toolbox/ -type d -name tla2tex))
+export ALLOY_CSS=${execdir}/styles/alloy.css
+LINE_NUMBERS="0"
+
+if [ -n "$numbers" ]; then
+  LINE_NUMBERS="1"
+fi
+
+export LINE_NUMBERS
+
+PLANTUML_FORMAT="png"
+
+if [ -n "$usesvg" ]; then
+  PLANTUML_FORMAT="svg"
+fi
+
+export PLANTUML_FORMAT
 
 echo Processing:
 echo "1. Generating docs:" 
@@ -48,5 +66,5 @@ fi
 
 if [ -z "$nosrc" ]; then
   echo 2. Extracting sources:
-  $execdir/md2sources $1 $4
+  $execdir/md2sources $1
 fi

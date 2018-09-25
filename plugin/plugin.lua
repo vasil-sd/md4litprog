@@ -8,10 +8,13 @@ end
 
 local codeFont = os.getenv("CODE_FONT") or "DejaVue Sans Mono"
 local textFont = os.getenv("TEXT_FONT") or "Source Sans Pro"
+local PlantUMLformat = os.getenv("PLANTUML_FORMAT") or "png"
+local alloyCSS = os.getenv("ALLOY_CSS") or ""
+local linum = os.getenv("LINE_NUMBERS") or "0"
 
-local texTextFont = "\\setmainfont[]{".. textFont .."}"
-local texCodeFont = "\\setmainfont[]{".. codeFont .."}"
-local texCodeFontAlloy = "\\setmonofont[]{".. codeFont .."}"
+local texTextFont = "\\setmainfont[]{".. textFont .."}\n"
+local texCodeFont = "\\setmainfont[]{".. codeFont .."}\n"
+local texCodeFontAlloy = "\\setmonofont[]{".. codeFont .."}\n"
 
 local function tla_codeblock2tex(code)
     local tmp = os.tmpname()
@@ -27,16 +30,30 @@ local function tla_codeblock2tex(code)
     os.remove(tmp)
     tex=pandoc.pipe("awk",{"BEGIN{f=0} /end{document}/{f=0} f==1 {print} /begin{document}/{f=1}", tmp .. ".tex"},"")
     os.remove(tmp .. ".tex")
-    return texCodeFont .. tex .. texTextFont
+    return texCodeFont .. "\\begin{Shaded}\n" .. tex .. "\\end{Shaded}\n" .. texTextFont
 end
 
 local function alloy_codeblock2tex(code)
-    tex = pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "style=alloy,linenos=false,noclasses", "-f", "latex"}, code)
-    return texCodeFontAlloy .. tex
+    local linenos = "false"
+    if linum == "1" then
+        linenos = "true"
+    end
+    tex = pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "style=alloy,linenos=" .. linenos .. ",noclasses", "-f", "latex"}, code)
+    return texCodeFontAlloy .. "\\begin{Shaded}\n" .. tex .. "\\end{Shaded}\n"
 end
 
 local function alloy_codeblock2html(code)
-    return pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "style=alloy,linenos=false,noclasses", "-f", "html"}, code)
+    local linenos = ""
+    if linum == "1" then
+        linenos = "linenos=inline,"
+    end
+    local options = ""
+    if alloyCSS == "" then
+        options = linenos .. "style=alloy,noclasses"
+    else
+        options = linenos .. "noclobber_cssfile=True,cssfile=" .. alloyCSS  .. ",noclasses"
+    end
+    return pandoc.pipe("pygmentize", {"-l", "alloy", "-O", options, "-f", "html"}, code)
 end
 
 local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
@@ -48,7 +65,7 @@ local function plantuml(puml, filetype, plantumlPath)
 end
 
 function CodeBlock(block)
-    if block.classes[1] == "alloy" then
+   if block.classes[1] == "alloy" then
      if is_html(FORMAT) then
         local html = alloy_codeblock2html(block.text)
         return pandoc.RawBlock('html',html)
@@ -60,11 +77,14 @@ function CodeBlock(block)
    end
    if block.classes[1] == "plantuml" then
      if is_html(FORMAT) then
-        -- "svg"
-        -- "image/svg+xml"
-        local img = plantuml(block.text, "png", plantumlPath)
-        local fname = pandoc.sha1(img) .. ".png"
-        pandoc.mediabag.insert(fname, "image/png", img)
+        local ext = PlantUMLformat
+        local mime = "image/png"
+        if ext == "svg" then
+          mime = "image/svg+xml"
+        end
+        local img = plantuml(block.text, ext, plantumlPath)
+        local fname = pandoc.sha1(img) .. "." .. ext
+        pandoc.mediabag.insert(fname, mime, img)
         return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
      end
      if is_latex(FORMAT) then
