@@ -20,4 +20,4 @@ comfortly edit markdown files.
 5. For OCaml interface files use `some.i.md`. It will be extracted into `some.mli`, `some.i.pdf` etc.
 6. PlantUML diagrams supported for both PDF and HTML files.
 7. Generated PDFs may be set up to contain all needed glyphs from fonts, so they are truly platform/fonts/etc-independent.
-8. HTMLs are generated as self-contined, i.e. all images are embedded into HTML, so they are fully standalone.
+8. HTMLs are generated as self-contained, i.e. all images are embedded into HTML, so they are fully standalone.
