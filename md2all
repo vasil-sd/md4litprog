@@ -25,8 +25,6 @@ mainfont="Source Sans Pro"
 export CODE_FONT="DejaVu Sans Mono"
 export TEXT_FONT="Source Sans Pro"
 
-export PLANTUML=${execdir}/plantuml/plantuml.jar
-export PLANTUML_FONT="${mainfont}"
 export CLASSPATH=$(dirname $(find /usr/share/java/tla-toolbox/ -type d -name tla2tex))
 export ALLOY_CSS=${execdir}/styles/alloy.css
 LINE_NUMBERS="0"
@@ -37,20 +35,12 @@ fi
 
 export LINE_NUMBERS
 
-PLANTUML_FORMAT="png"
-
-if [ -n "$usesvg" ]; then
-  PLANTUML_FORMAT="svg"
-fi
-
-export PLANTUML_FORMAT
-
 echo Processing:
 echo "1. Generating docs:" 
 
 if [ -z "$nopdf" ]; then
   echo '                   ' $1 '->' ${namepdf}
-  pandoc -f gfm -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} $1 > /dev/null 2>&1
+  FORMAT=pdf pp < $1 | pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} - #> /dev/null 2>&1
   if [ -n "$embedfonts" ]; then
     pdf2ps ${temppdf} ${tempps}
     ps2pdf14 -dPDFSETTINGS=/default -dConvertImagesToIndexed=true -dLZWEncodePages=true ${tempps} ${temppdf}
@@ -60,11 +50,6 @@ fi
 
 if [ -z "$nohtml" ]; then
   echo '                   ' $1 '->' ${namehtml}
-  pandoc -f gfm -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} $1 > /dev/null 2>&1
+  FORMAT=html pp < $1 | pandoc -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} - #> /dev/null 2>&1
   rm ${tempps} ${temptheme} >/dev/null 2>&1
-fi
-
-if [ -z "$nosrc" ]; then
-  echo 2. Extracting sources:
-  $execdir/md2sources $1
 fi

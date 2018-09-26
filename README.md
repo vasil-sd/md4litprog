@@ -4,9 +4,10 @@ Here is some scripts for using pandoc as a tool for literate programming.
 # Setup
 
 1. Install `pandoc`, `xelatex`, `ghostscript`, `texlive`, `graphviz` and `pygmentize`
-2. Install fonts `ttf-google-fonts-typewolf`
-3. Augment `pygments` with `https://github.com/vasil-sd/pygments-alloy`
-4. Put contents of this repo somewhere and setup `$PATH` env var.
+2. Install `pp` from `https://github.com/vasil-sd/pp`
+3. Install fonts `ttf-google-fonts-typewolf`
+4. Augment `pygments` with `https://github.com/vasil-sd/pygments-alloy`
+5. Put contents of this repo somewhere and setup `$PATH` env var.
 
 I recommend to setup `Emacs` with `markdown-mode`, `tuareg`, `plantuml-mode` etc, to
 comfortly edit markdown files.
@@ -15,7 +16,7 @@ comfortly edit markdown files.
 
 1. Given an `some.md` file with source code blocks in Github markdown style
 2. Run `md2all some.md`
-3. It will produce `some.pdf`, `some.html` and `some.X` source code files, where X stands for: `c`, `ml`, `als` etc.
+3. It will produce `some.pdf`, `some.html` and a bunch of source code files, where X stands for: `c`, `ml`, `als` etc.
 4. Supported languges: `ocaml`, `alloy`, `c`, `tla`. It is fairly easy to add more languages, see `md2sources` script.
 5. For OCaml interface files use `some.i.md`. It will be extracted into `some.mli`, `some.i.pdf` etc.
 6. PlantUML diagrams supported for both PDF and HTML files.

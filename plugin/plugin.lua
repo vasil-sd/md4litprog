@@ -8,7 +8,6 @@ end
 
 local codeFont = os.getenv("CODE_FONT") or "DejaVue Sans Mono"
 local textFont = os.getenv("TEXT_FONT") or "Source Sans Pro"
-local PlantUMLformat = os.getenv("PLANTUML_FORMAT") or "png"
 local alloyCSS = os.getenv("ALLOY_CSS") or ""
 local linum = os.getenv("LINE_NUMBERS") or "0"
 
@@ -56,14 +55,6 @@ local function alloy_codeblock2html(code)
     return pandoc.pipe("pygmentize", {"-l", "alloy", "-O", options, "-f", "html"}, code)
 end
 
-local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
-local plantumlFont = os.getenv("PLANTUML_FONT") or "Helvetica"
-
-local function plantuml(puml, filetype, plantumlPath)
-    local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8", "-SDefaultFontName=" .. plantumlFont}, puml)
-    return final
-end
-
 function CodeBlock(block)
    if block.classes[1] == "alloy" then
      if is_html(FORMAT) then
@@ -73,25 +64,6 @@ function CodeBlock(block)
      if is_latex(FORMAT) then
         local tex = alloy_codeblock2tex(block.text)
         return pandoc.RawBlock('latex',tex)
-     end
-   end
-   if block.classes[1] == "plantuml" then
-     if is_html(FORMAT) then
-        local ext = PlantUMLformat
-        local mime = "image/png"
-        if ext == "svg" then
-          mime = "image/svg+xml"
-        end
-        local img = plantuml(block.text, ext, plantumlPath)
-        local fname = pandoc.sha1(img) .. "." .. ext
-        pandoc.mediabag.insert(fname, mime, img)
-        return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
-     end
-     if is_latex(FORMAT) then
-        local img = plantuml(block.text, "pdf", plantumlPath)
-        local fname = pandoc.sha1(img) .. ".pdf"
-        pandoc.mediabag.insert(fname, "application/pdf", img)
-        return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
      end
    end
    if block.classes[1] == "tla" then
