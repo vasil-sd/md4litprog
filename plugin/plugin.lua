@@ -29,7 +29,7 @@ local function tla_codeblock2tex(code)
     os.remove(tmp)
     tex=pandoc.pipe("awk",{"BEGIN{f=0} /end{document}/{f=0} f==1 {print} /begin{document}/{f=1}", tmp .. ".tex"},"")
     os.remove(tmp .. ".tex")
-    return texCodeFont .. "\\begin{Shaded}\n" .. tex .. "\\end{Shaded}\n" .. texTextFont
+    return texCodeFont .. "\\begin{snugshade}\n" .. tex .. "\\end{snugshade}\n" .. texTextFont
 end
 
 local function alloy_codeblock2tex(code)
@@ -38,7 +38,7 @@ local function alloy_codeblock2tex(code)
         linenos = "true"
     end
     tex = pandoc.pipe("pygmentize", {"-l", "alloy", "-O", "style=alloy,linenos=" .. linenos .. ",noclasses", "-f", "latex"}, code)
-    return texCodeFontAlloy .. "\\begin{Shaded}\n" .. tex .. "\\end{Shaded}\n"
+    return texCodeFontAlloy .. "\\begin{snugshade}\n" .. tex .. "\\end{snugshade}\n"
 end
 
 local function alloy_codeblock2html(code)
