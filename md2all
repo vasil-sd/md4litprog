@@ -15,6 +15,7 @@ tempname=$(mktemp -u)
 tempps=${tempname}.ps
 temppdf=${tempname}.pdf
 theme=${execdir}/styles/light.theme
+htmlstyle=${execdir}/styles/default.css
 texstyle=${execdir}/styles/default.sty
 plugin=${execdir}/plugin/plugin.lua
 namepdf=${name}.pdf
@@ -50,6 +51,6 @@ fi
 
 if [ -z "$nohtml" ]; then
   echo '                   ' $1 '->' ${namehtml}
-  FORMAT=html pp < $1 | pandoc -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} - #> /dev/null 2>&1
+  FORMAT=html pp < $1 | pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} - #> /dev/null 2>&1
   rm ${tempps} ${temptheme} >/dev/null 2>&1
 fi
