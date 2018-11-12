@@ -13,6 +13,7 @@ name=${1%.*}
 
 tempname=$(mktemp -u)
 tempps=${tempname}.ps
+tempmd=${tempname}.md
 temppdf=${tempname}.pdf
 theme=${execdir}/styles/light.theme
 htmlstyle=${execdir}/styles/default.css
@@ -41,16 +42,21 @@ echo "1. Generating docs:"
 
 if [ -z "$nopdf" ]; then
   echo '                   ' $1 '->' ${namepdf}
-  FORMAT=pdf pp < $1 | pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} - #> /dev/null 2>&1
+  FORMAT=pdf pp < $1 > ${tempmd}
+  pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} ${tempmd} #> /dev/null 2>&1
   if [ -n "$embedfonts" ]; then
     pdf2ps ${temppdf} ${tempps}
     ps2pdf14 -dPDFSETTINGS=/default -dConvertImagesToIndexed=true -dLZWEncodePages=true ${tempps} ${temppdf}
+    rm ${tempps}
   fi
   mv ${temppdf} ${namepdf}
+  rm ${tempmd}
 fi
 
 if [ -z "$nohtml" ]; then
   echo '                   ' $1 '->' ${namehtml}
-  FORMAT=html pp < $1 | pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} - #> /dev/null 2>&1
+  FORMAT=html pp < $1 > ${tempmd}
+  pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} ${tempmd} #> /dev/null 2>&1
   rm ${tempps} ${temptheme} >/dev/null 2>&1
+  rm ${tempmd}
 fi

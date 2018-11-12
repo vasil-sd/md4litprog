@@ -29,7 +29,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -74,6 +74,281 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
+  <style type="text/css">
+html {
+font-size: 100%;
+overflow-y: scroll;
+-webkit-text-size-adjust: 100%;
+-ms-text-size-adjust: 100%;
+}
+body {
+color: #333;
+font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+font-size: 12px;
+line-height: 1.7;
+padding: 1em;
+margin: auto;
+max-width: 60em;
+background: #fefefe;
+}
+a {
+color: #0645ad;
+text-decoration: none;
+}
+a:visited {
+color: #0b0080;
+}
+a:hover {
+color: #06e;
+}
+a:active {
+color: #faa700;
+}
+a:focus {
+outline: thin dotted;
+}
+*::-moz-selection {
+background: rgba(255, 255, 0, 0.3);
+color: #000;
+}
+*::selection {
+background: rgba(255, 255, 0, 0.3);
+color: #000;
+}
+a::-moz-selection {
+background: rgba(255, 255, 0, 0.3);
+color: #0645ad;
+}
+a::selection {
+background: rgba(255, 255, 0, 0.3);
+color: #0645ad;
+}
+p {
+margin: 1em 0;
+}
+img {
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+color: #111;
+line-height: 125%;
+margin-top: 2em;
+font-weight: normal;
+}
+h4, h5, h6 {
+font-weight: bold;
+}
+h1 {
+font-size: 2.5em;
+}
+h2 {
+font-size: 2em;
+}
+h3 {
+font-size: 1.5em;
+}
+h4 {
+font-size: 1.2em;
+}
+h5 {
+font-size: 1em;
+}
+h6 {
+font-size: 0.9em;
+}
+blockquote {
+color: #666666;
+margin: 0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr {
+display: block;
+height: 2px;
+border: 0;
+border-top: 1px solid #aaa;
+border-bottom: 1px solid #eee;
+margin: 1em 0;
+padding: 0;
+}
+pre, code, kbd, samp {
+color: #000;
+font-family: monospace, monospace;
+_font-family: 'courier new', monospace;
+font-size: 0.98em;
+}
+pre {
+white-space: pre;
+white-space: pre-wrap;
+word-wrap: break-word;
+border: 1px solid gray;
+padding: 5px;
+background-color: #f0f0ff;
+}
+div.highlight {
+margin: 0 2em 0 2em;
+}
+div.sourceCode {
+margin: 0 2em 0 2em;
+}
+b, strong {
+font-weight: bold;
+}
+dfn {
+font-style: italic;
+}
+ins {
+background: #ff9;
+color: #000;
+text-decoration: none;
+}
+mark {
+background: #ff0;
+color: #000;
+font-style: italic;
+font-weight: bold;
+}
+sub, sup {
+font-size: 75%;
+line-height: 0;
+position: relative;
+vertical-align: baseline;
+}
+sup {
+top: -0.5em;
+}
+sub {
+bottom: -0.25em;
+}
+ul, ol {
+margin: 1em 0;
+padding: 0 0 0 2em;
+}
+li p:last-child {
+margin-bottom: 0;
+}
+ul ul, ol ol {
+margin: .3em 0;
+}
+dl {
+margin-bottom: 1em;
+}
+dt {
+font-weight: bold;
+margin-bottom: .8em;
+}
+dd {
+margin: 0 0 .8em 2em;
+}
+dd:last-child {
+margin-bottom: 0;
+}
+img {
+border: 0;
+-ms-interpolation-mode: bicubic;
+vertical-align: middle;
+}
+figure {
+display: block;
+text-align: center;
+margin: 1em 0;
+}
+figure img {
+border: none;
+margin: 0 auto;
+}
+figcaption {
+font-size: 0.8em;
+font-style: italic;
+margin: 0 0 .8em;
+}
+table {
+margin-bottom: 2em;
+border-bottom: 1px solid #ddd;
+border-right: 1px solid #ddd;
+border-spacing: 0;
+border-collapse: collapse;
+}
+table th {
+padding: .2em 1em;
+background-color: #eee;
+border-top: 1px solid #ddd;
+border-left: 1px solid #ddd;
+}
+table td {
+padding: .2em 1em;
+border-top: 1px solid #ddd;
+border-left: 1px solid #ddd;
+vertical-align: top;
+}
+.author {
+font-size: 1.2em;
+text-align: center;
+}
+@media only screen and (min-width: 480px) {
+body {
+font-size: 14px;
+}
+}
+@media only screen and (min-width: 768px) {
+body {
+font-size: 16px;
+}
+}
+@media print {
+* {
+background: transparent !important;
+color: black !important;
+filter: none !important;
+-ms-filter: none !important;
+}
+body {
+font-size: 12pt;
+max-width: 100%;
+}
+a, a:visited {
+text-decoration: underline;
+}
+hr {
+height: 1px;
+border: 0;
+border-bottom: 1px solid black;
+}
+a[href]:after {
+content: " (" attr(href) ")";
+}
+abbr[title]:after {
+content: " (" attr(title) ")";
+}
+.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+content: "";
+}
+pre, blockquote {
+border: 1px solid #999;
+padding-right: 1em;
+page-break-inside: avoid;
+}
+tr, img {
+page-break-inside: avoid;
+}
+img {
+max-width: 100% !important;
+}
+@page :left {
+margin: 15mm 20mm 15mm 10mm;
+}
+@page :right {
+margin: 15mm 10mm 15mm 20mm;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3 {
+page-break-after: avoid;
+}
+}
+</style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -99,10 +374,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <p><strong>prev</strong> и <strong>next</strong> - это отношения связывающие текущий элемент с предыдущим и последующим.</p>
 <p>И соответствующая С-структура:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">struct</span> node {</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">struct</span> node *prev;</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="kw">struct</span> node *next;</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">};</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">struct</span> node {</a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">struct</span> node *prev;</a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">struct</span> node *next;</a>
+<a class="sourceLine" id="cb1-4" title="4">};</a></code></pre></div>
 <h3 id="логические-ограничения-на-списки">Логические ограничения на списки</h3>
 <h4 id="корректность">Корректность</h4>
 <p>Все списки из элементов правильно связаны. То есть текущий элемент является предыдущим для следующего и наоборот. В противном случае у нас получатся деревья или графы с циклами.</p>
@@ -114,11 +389,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </pre></div>
 
 <p>И функция на C для проверки:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="dt">int</span> valid(<span class="kw">struct</span> node* n)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">{</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="cf">return</span> n-&gt;next &amp;&amp; n-&gt;next-&gt;prev == n &amp;&amp;</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">         n-&gt;prev &amp;&amp; n-&gt;prev-&gt;next == n;</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb2-1" title="1"><span class="dt">int</span> valid(<span class="kw">struct</span> node* n)</a>
+<a class="sourceLine" id="cb2-2" title="2">{</a>
+<a class="sourceLine" id="cb2-3" title="3">  <span class="cf">return</span> n-&gt;next &amp;&amp; n-&gt;next-&gt;prev == n &amp;&amp;</a>
+<a class="sourceLine" id="cb2-4" title="4">         n-&gt;prev &amp;&amp; n-&gt;prev-&gt;next == n;</a>
+<a class="sourceLine" id="cb2-5" title="5">}</a></code></pre></div>
 <h2 id="функции-для-работы-со-списками">Функции для работы со списками</h2>
 <h3 id="проверка-цикличности">Проверка цикличности</h3>
 <figure>
@@ -133,13 +408,189 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </pre></div>
 
 <p>Теперь код:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="dt">int</span> is_cyclic(<span class="kw">struct</span> node* n)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">{</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">struct</span> node* next = n;</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="cf">do</span> {</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">    next = next-&gt;next;</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  } <span class="cf">while</span> (next &amp;&amp; next != n);</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="cf">return</span> next == n;</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode C"><code class="sourceCode c"><a class="sourceLine" id="cb3-1" title="1"><span class="dt">int</span> is_cyclic(<span class="kw">struct</span> node* n)</a>
+<a class="sourceLine" id="cb3-2" title="2">{</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="kw">struct</span> node* next = n;</a>
+<a class="sourceLine" id="cb3-4" title="4">  <span class="cf">do</span> {</a>
+<a class="sourceLine" id="cb3-5" title="5">    next = next-&gt;next;</a>
+<a class="sourceLine" id="cb3-6" title="6">  } <span class="cf">while</span> (next &amp;&amp; next != n);</a>
+<a class="sourceLine" id="cb3-7" title="7">  <span class="cf">return</span> next == n;</a>
+<a class="sourceLine" id="cb3-8" title="8">}</a></code></pre></div>
+<pre class="tla"><code>-------------------------- MODULE TransitiveClosure -------------------------
+(***************************************************************************)
+(* Mathematicians define a relation R to be a set of ordered pairs, and    *)
+(* write `s R t&#39; to mean `&lt;&lt;s, t&gt;&gt; \in R&#39;.  The transitive closure TC(R)   *)
+(* of the relation R is the smallest relation containg R such that,        *)
+(* `s TC(R) t&#39; and `t TC(R) u&#39; imply `s TC(R) u&#39;, for any s, t, and u.     *)
+(* This module shows several ways of defining the operator TC.             *)
+(*                                                                         *)
+(* It is sometimes more convenient to represent a relation as a            *)
+(* Boolean-valued function of two arguments, where `s R t&#39; means R[s, t].  *)
+(* It is a straightforward exercise to translate everything in this module *)
+(* to that representation.                                                 *)
+(*                                                                         *)
+(* Mathematicians say that R is a relation on a set S iff R is a subset of *)
+(* S \X S.  Let the `support&#39; of a relation R be the set of all elements s *)
+(* such that `s R t&#39; or `t R s&#39; for some t.  Then any relation is a        *)
+(* relation on its support.  Moreover, the support of R is the support of  *)
+(* TC(R).  So, to define the transitive closure of R, there&#39;s no need to   *)
+(* say what set R is a relation on.                                        *)
+(*                                                                         *)
+(* Let&#39;s begin by importing some modules we&#39;ll need and defining the the   *)
+(* support of a relation.                                                  *)
+(***************************************************************************)
+EXTENDS Integers, Sequences, FiniteSets, TLC
+
+Support(R) == {r[1] : r \in R} \cup {r[2] : r \in R}
+
+(***************************************************************************)
+(* A relation R defines a directed graph on its support, where there is an *)
+(* edge from s to t iff `s R t&#39;.  We can define TC(R) to be the relation   *)
+(* such that `s R t&#39; holds iff there is a path from s to t in this graph.  *)
+(* We represent a path by the sequence of nodes on the path, so the length *)
+(* of the path (the number of edges) is one greater than the length of the *)
+(* sequence.  We then get the following definition of TC.                  *)
+(***************************************************************************)
+TC(R) == 
+  LET S == Support(R)     
+  IN  {&lt;&lt;s, t&gt;&gt; \in S \X S :
+        \E p \in Seq(S) : /\ Len(p) &gt; 1
+                          /\ p[1] = s
+                          /\ p[Len(p)] = t
+                          /\ \A i \in  1..(Len(p)-1) : &lt;&lt;p[i], p[i+1]&gt;&gt; \in R}
+
+(***************************************************************************)
+(* This definition can&#39;t be evaluated by TLC because Seq(S) is an infinite *)
+(* set.  However, it&#39;s not hard to see that if R is a finite set, then it  *)
+(* suffices to consider paths whose length is at most Cardinality(S).      *)
+(* Modifying the definition of TC we get the following definition that     *)
+(* defines TC1(R) to be the transitive closure of R, if R is a finite set. *)
+(* The LET expression defines BoundedSeq(S, n) to be the set of all        *)
+(* sequences in Seq(S) of length at most n.                                *)
+(***************************************************************************)
+TC1(R) == 
+  LET BoundedSeq(S, n) == UNION {[1..i -&gt; S] : i \in 0..n}
+      S == Support(R)     
+  IN  {&lt;&lt;s, t&gt;&gt; \in S \X S :
+                    \E p \in BoundedSeq(S, Cardinality(S)+1) : 
+                            /\ Len(p) &gt; 1
+                            /\ p[1] = s
+                            /\ p[Len(p)] = t
+                            /\ \A i \in  1..(Len(p)-1) : &lt;&lt;p[i], p[i+1]&gt;&gt; \in R}
+
+(***************************************************************************)
+(* This naive method used by TLC to evaluate expressions makes this        *)
+(* definition rather inefficient.  (As an exercise, find an upper bound on *)
+(* its complexity.) To obtain a definition that TLC can evaluate more      *)
+(* efficiently, let&#39;s look at the closure operation more algebraically.    *)
+(* Let&#39;s define the composition of two relations R and T as follows.       *)
+(***************************************************************************)
+R ** T == LET SR == Support(R)
+              ST == Support(T)
+          IN  {&lt;&lt;r, t&gt;&gt; \in SR \X ST : 
+                \E s \in SR \cap ST : (&lt;&lt;r, s&gt;&gt; \in R) /\ (&lt;&lt;s, t&gt;&gt; \in T)}
+                                         
+(***************************************************************************)
+(* We can then define the closure of R to equal                            *)
+(*                                                                         *)
+(*    R \cup (R ** R) \cup (R ** R ** R) \cup ...                          *)
+(*                                                                         *)
+(* For R finite, this union converges to the transitive closure when the   *)
+(* number of terms equals the cardinality of the support of R.  This leads *)
+(* to the following definition.                                            *)
+(***************************************************************************)
+TC2(R) ==
+  LET C[n \in Nat] == IF n = 0 THEN R
+                               ELSE C[n-1] \cup (C[n-1] ** R)
+  IN  IF R = {} THEN {} ELSE C[Cardinality(Support(R)) - 1] 
+
+(***************************************************************************)
+(* These definitions of TC1 and TC2 are somewhat unsatisfactory because of *)
+(* their use of Cardinality(S).  For example, it would be easy to make a   *)
+(* mistake and use Cardinality(S) instead of Cardinality(S)+1 in the       *)
+(* definition of TC1(R).  I find the following definition more elegant     *)
+(* than the preceding two.  It is also more asymptotically more efficient  *)
+(* because it makes O(log Cardinality (S)) rather than O(Cardinality(S))   *)
+(* recursive calls.                                                        *)
+(***************************************************************************)
+RECURSIVE TC3(_)
+TC3(R) == LET RR == R ** R
+          IN  IF RR \subseteq R THEN R ELSE TC3(R \cup RR)
+
+(***************************************************************************)
+(* The preceding two definitions can be made slightly more efficient to    *)
+(* execute by expanding the definition of ** and making some simple        *)
+(* optimizations.  But, this is unlikely to be worth complicating the      *)
+(* definitions for.                                                        *)
+(*                                                                         *)
+(* The following definition is (asymptotically) the most efficient.  It is *)
+(* essentially the TLA+ representation of Warshall&#39;s algorithm.            *)
+(* (Warshall&#39;s algorithm is typically written as an iterative procedure    *)
+(* for the case of a relation on a set i..j of integers, when the relation *)
+(* is represented as a Boolean-valued function.)                           *)
+(***************************************************************************)
+TC4(R) ==
+  LET S == Support(R)
+      RECURSIVE TCR(_)
+      TCR(T) == IF T = {} 
+                  THEN R
+                  ELSE LET r == CHOOSE s \in T : TRUE
+                           RR == TCR(T \ {r})
+                       IN  RR \cup {&lt;&lt;s, t&gt;&gt; \in S \X S : 
+                                      &lt;&lt;s, r&gt;&gt; \in RR /\ &lt;&lt;r, t&gt;&gt; \in RR}
+  IN  TCR(S)
+  
+(***************************************************************************)
+(* We now test that these four definitions are equivalent.  Since it&#39;s     *)
+(* unlikely that all four are wrong in the same way, their equivalence     *)
+(* makes it highly probable that they&#39;re correct.                          *)
+(***************************************************************************)
+ASSUME \A N \in 0..3 : 
+          \A R \in SUBSET ((1..N) \X (1..N)) : /\ TC1(R) = TC2(R)
+                                               /\ TC2(R) = TC3(R) 
+                                               /\ TC3(R) = TC4(R)
+
+(***************************************************************************)
+(* Sometimes we want to represent a relation as a Boolean-valued operator, *)
+(* so we can write `s R t&#39; as R(s, t).  This representation is less        *)
+(* convenient for manipulating relations, since an operator is not an      *)
+(* ordinary value the way a function is.  For example, since TLA+ does not *)
+(* permit us to define operator-valued operators, we cannot define a       *)
+(* transitive closure operator TC so TC(R) is the operator that represents *)
+(* the transitive closure.  Moreover, an operator R by itself cannot       *)
+(* represent a relation; we also have to know what set it is an operator   *)
+(* on.  (If R is a function, its domain tells us that.)                    *)
+(*                                                                         *)
+(* However, there may be situations in which you want to represent         *)
+(* relations by operators.  In that case, you can define an operator TC so *)
+(* that, if R is an operator representing a relation on S, and TCR is the  *)
+(* operator representing it transitive closure, then                       *)
+(*                                                                         *)
+(*   TCR(s, t) = TC(R, S, s, t)                                            *)
+(*                                                                         *)
+(* for all s, t.  Here is the definition.  (This assumes that for an       *)
+(* operator R on a set S, R(s, t) equals FALSE for all s and t not in S.)  *)
+(***************************************************************************)
+TC5(R(_,_), S, s, t) ==
+  LET CR[n \in Nat, v \in S] == 
+          IF n = 0 THEN R(s, v)
+                   ELSE \/ CR[n-1, v] 
+                        \/ \E u \in S : CR[n-1, u] /\ R(u, v)
+  IN  /\ s \in S
+      /\ t \in S
+      /\ CR[Cardinality(S)-1, t]
+
+(***************************************************************************)
+(* Finally, the following assumption checks that our definition TC5 agrees *)
+(* with our definition TC1.                                                *)
+(***************************************************************************)
+ASSUME \A N \in 0..3 : \A R \in SUBSET ((1..N) \X (1..N)) :
+         LET RR(s, t) == &lt;&lt;s, t&gt;&gt; \in R
+             S == Support(R)
+         IN  \A s, t \in S : 
+                TC5(RR, S, s, t) &lt;=&gt; (&lt;&lt;s, t&gt;&gt; \in TC1(R))
+=============================================================================
+
+</code></pre>
 </body>
 </html>
