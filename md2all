@@ -8,6 +8,7 @@ nosrc=$(echo "$@" | grep -F "nosrc")
 embedfonts=$(echo "$@" | grep -F "embedfonts")
 usesvg=$(echo "$@" | grep -F "usesvg")
 numbers=$(echo "$@" | grep -F "linenum")
+quiet=$(echo "$@" | grep -F "quiet")
 
 name=${1%.*}
 
@@ -37,11 +38,11 @@ fi
 
 export LINE_NUMBERS
 
-echo Processing:
-echo "1. Generating docs:" 
+test -z "${quiet}" && echo Processing:
+test -z "${quiet}" && echo "1. Generating docs:" 
 
 if [ -z "$nopdf" ]; then
-  echo '                   ' $1 '->' ${namepdf}
+  test -z "${quiet}" && echo '                   ' $1 '->' ${namepdf}
   FORMAT=pdf pp < $1 > ${tempmd}
   pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} ${tempmd} #> /dev/null 2>&1
   if [ -n "$embedfonts" ]; then
@@ -49,14 +50,13 @@ if [ -z "$nopdf" ]; then
     ps2pdf14 -dPDFSETTINGS=/default -dConvertImagesToIndexed=true -dLZWEncodePages=true ${tempps} ${temppdf}
     rm ${tempps}
   fi
-  mv ${temppdf} ${namepdf}
-  rm ${tempmd}
+  mv ${temppdf} ${namepdf} 
+  rm ${tempmd} > /dev/null 2>&1
 fi
 
 if [ -z "$nohtml" ]; then
-  echo '                   ' $1 '->' ${namehtml}
+  test -z "${quiet}" && echo '                   ' $1 '->' ${namehtml}
   FORMAT=html pp < $1 > ${tempmd}
   pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} ${tempmd} #> /dev/null 2>&1
-  rm ${tempps} ${temptheme} >/dev/null 2>&1
-  rm ${tempmd}
+  rm ${tempmd} >/dev/null 2>&1
 fi
