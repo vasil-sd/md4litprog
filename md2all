@@ -9,6 +9,7 @@ embedfonts=$(echo "$@" | grep -F "embedfonts")
 usesvg=$(echo "$@" | grep -F "usesvg")
 numbers=$(echo "$@" | grep -F "linenum")
 quiet=$(echo "$@" | grep -F "quiet")
+onlypp=$(echo "$@" | grep -F "onlypp")
 
 name=${1%.*}
 
@@ -39,24 +40,50 @@ fi
 export LINE_NUMBERS
 
 test -z "${quiet}" && echo Processing:
-test -z "${quiet}" && echo "1. Generating docs:" 
+if [ -z "${quiet}" ]; then
+  if [ -z "$onlypp" ]; then
+    echo "   Generating docs:" 
+  else
+    echo "   Preprocessing only:" 
+  fi
+fi
 
 if [ -z "$nopdf" ]; then
-  test -z "${quiet}" && echo '                   ' $1 '->' ${namepdf}
-  FORMAT=pdf pp < $1 > ${tempmd}
-  pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} ${tempmd} #> /dev/null 2>&1
-  if [ -n "$embedfonts" ]; then
-    pdf2ps ${temppdf} ${tempps}
-    ps2pdf14 -dPDFSETTINGS=/default -dConvertImagesToIndexed=true -dLZWEncodePages=true ${tempps} ${temppdf}
-    rm ${tempps}
+  if [ -z "${quiet}" ]; then
+    if [ -z "$onlypp" ]; then
+      echo '                   ' $1 '->' ${namepdf}
+    else
+      echo '                   ' $1 '->' $1.pdf.pp
+    fi
   fi
-  mv ${temppdf} ${namepdf} 
-  rm ${tempmd} > /dev/null 2>&1
+  FORMAT=pdf pp < $1 > ${tempmd}
+  if [ -z "$onlypp" ]; then
+    pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} ${tempmd} #> /dev/null 2>&1
+    if [ -n "$embedfonts" ]; then
+      pdf2ps ${temppdf} ${tempps}
+      ps2pdf14 -dPDFSETTINGS=/default -dConvertImagesToIndexed=true -dLZWEncodePages=true ${tempps} ${temppdf}
+      rm ${tempps}
+    fi
+    mv ${temppdf} ${namepdf} 
+    rm ${tempmd} > /dev/null 2>&1
+  else
+    mv ${tempmd} $1.pdf.pp
+  fi
 fi
 
 if [ -z "$nohtml" ]; then
-  test -z "${quiet}" && echo '                   ' $1 '->' ${namehtml}
+  if [ -z "${quiet}" ]; then
+    if [ -z "$onlypp" ]; then
+      echo '                   ' $1 '->' ${namehtml}
+    else
+      echo '                   ' $1 '->' $1.html.pp
+    fi
+  fi
   FORMAT=html pp < $1 > ${tempmd}
-  pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} ${tempmd} #> /dev/null 2>&1
-  rm ${tempmd} >/dev/null 2>&1
+  if [ -z "$onlypp" ]; then
+    pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} ${tempmd} #> /dev/null 2>&1
+    rm ${tempmd} >/dev/null 2>&1
+  else
+    mv ${tempmd} $1.html.pp
+  fi
 fi
