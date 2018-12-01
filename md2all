@@ -56,7 +56,7 @@ if [ -z "$nopdf" ]; then
       echo '                   ' $1 '->' $1.pdf.pp
     fi
   fi
-  FORMAT=pdf pp < $1 > ${tempmd}
+  FORMAT=pdf pp $1 > ${tempmd}
   if [ -z "$onlypp" ]; then
     pandoc -t latex -M mainfont="${mainfont}" --highlight-style=${theme} --pdf-engine=xelatex --lua-filter=${plugin} --standalone --self-contained --include-in-header ${texstyle} -o ${temppdf} ${tempmd} #> /dev/null 2>&1
     if [ -n "$embedfonts" ]; then
@@ -79,7 +79,7 @@ if [ -z "$nohtml" ]; then
       echo '                   ' $1 '->' $1.html.pp
     fi
   fi
-  FORMAT=html pp < $1 > ${tempmd}
+  FORMAT=html pp $1 > ${tempmd}
   if [ -z "$onlypp" ]; then
     pandoc -c ${htmlstyle} -t html --highlight-style=${theme} --self-contained  --lua-filter=${plugin} -o ${namehtml} ${tempmd} #> /dev/null 2>&1
     rm ${tempmd} >/dev/null 2>&1

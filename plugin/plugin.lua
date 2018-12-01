@@ -6,7 +6,7 @@ local function is_latex (format)
   return format == 'latex'
 end
 
-local codeFont = os.getenv("CODE_FONT") or "DejaVue Sans Mono"
+local codeFont = os.getenv("CODE_FONT") or "DejaVu Sans Mono"
 local textFont = os.getenv("TEXT_FONT") or "Source Sans Pro"
 local alloyCSS = os.getenv("ALLOY_CSS") or ""
 local linum = os.getenv("LINE_NUMBERS") or "0"
