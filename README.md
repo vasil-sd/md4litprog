@@ -7,6 +7,7 @@ Here is some scripts for using pandoc as a tool for literate programming.
 2. Install `pp` from `https://github.com/vasil-sd/pp`
 3. Install fonts `ttf-google-fonts-typewolf`
 4. Augment `pygments` with `https://github.com/vasil-sd/pygments-alloy`
+   and `https://github.com/vasil-sd/tla-pygments`
 5. Put contents of this repo somewhere and setup `$PATH` env var.
 
 I recommend to setup `Emacs` with `markdown-mode`, `tuareg`, `plantuml-mode` etc, to

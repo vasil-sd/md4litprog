@@ -15,7 +15,7 @@ local texTextFont = "\\setmainfont[]{".. textFont .."}\n"
 local texCodeFont = "\\setmainfont[]{".. codeFont .."}\n"
 local texCodeFontAlloy = "\\setmonofont[]{".. codeFont .."}\n"
 
-local function tla_codeblock2tex(code)
+local function tlaplus_codeblock2tex(code)
     local tmp = os.tmpname()
     local tmpdir = string.match(tmp, "^(.*[\\/])") or "."
     local f = io.open(tmp .. ".tla", 'w')
@@ -55,7 +55,48 @@ local function alloy_codeblock2html(code)
     return pandoc.pipe("pygmentize", {"-l", "alloy", "-O", options, "-f", "html"}, code)
 end
 
+local function tla_codeblock2tex(code)
+    local linenos = "false"
+    if linum == "1" then
+        linenos = "true"
+    end
+    tex = pandoc.pipe("pygmentize", {"-l", "tla", "-O", "linenos=" .. linenos .. ",noclasses", "-f", "latex"}, code)
+    return texCodeFontAlloy .. "\\begin{snugshade}\n" .. tex .. "\\end{snugshade}\n"
+end
+
+local function tla_codeblock2html(code)
+    local linenos = ""
+    if linum == "1" then
+        linenos = "linenos=inline,"
+    end
+    local options = ""
+    options = linenos .. "noclasses"
+    return pandoc.pipe("pygmentize", {"-l", "tla", "-O", options, "-f", "html"}, code)
+end
+
+local function is_tla_module(code)
+    if string.find(string.sub(code, 1, math.min(string.len(code), 80)),"MODULE ", 1, true) ~= nil then
+      return true
+    end
+    return false
+end
+
 function CodeBlock(block)
+   if block.classes[1] == "tla" then
+     if is_html(FORMAT) then
+        local html = tla_codeblock2html(block.text)
+        return pandoc.RawBlock('html',html)
+     end
+     if is_latex(FORMAT) then
+        if is_tla_module(block.text) then
+           local tex = tlaplus_codeblock2tex(block.text)
+           return pandoc.RawBlock('latex',tex)
+        else
+           local tex = tla_codeblock2tex(block.text)
+           return pandoc.RawBlock('latex',tex)
+        end
+     end
+   end
    if block.classes[1] == "alloy" then
      if is_html(FORMAT) then
         local html = alloy_codeblock2html(block.text)
@@ -63,15 +104,6 @@ function CodeBlock(block)
      end
      if is_latex(FORMAT) then
         local tex = alloy_codeblock2tex(block.text)
-        return pandoc.RawBlock('latex',tex)
-     end
-   end
-   if block.classes[1] == "tla" then
-     if is_html(FORMAT) then
-       return block
-     end
-     if is_latex(FORMAT) then
-        local tex = tla_codeblock2tex(block.text)
         return pandoc.RawBlock('latex',tex)
      end
    end
